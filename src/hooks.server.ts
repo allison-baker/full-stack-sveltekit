@@ -8,7 +8,7 @@ if (!clientPromise) {
 }
 
 const githubConfig = {
-	clientID: process.env.GITHUB_ID,
+	clientId: process.env.GITHUB_ID,
 	clientSecret: process.env.GITHUB_SECRET
 };
 
