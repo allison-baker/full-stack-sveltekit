@@ -9,12 +9,15 @@ if (!clientPromise) {
 
 let githubConfig = {
 	clientId: process.env.GITHUB_PROD_ID,
-	clientSecret: process.env.GITHUB_PROD_SECRET
+	clientSecret: process.env.GITHUB_PROD_SECRET,
+	allowDangerousEmailAccountLinking: true
 };
+
 if (process.env.NODE_ENV === 'development') {
 	githubConfig = {
 		clientId: process.env.GITHUB_DEV_ID,
-		clientSecret: process.env.GITHUB_DEV_SECRET
+		clientSecret: process.env.GITHUB_DEV_SECRET,
+		allowDangerousEmailAccountLinking: true
 	};
 }
 

@@ -12,7 +12,7 @@
 			<p>{$page.data.session?.user?.email}</p>
 			<button class="btn variant-ghost-primary" on:click={() => signOut()}>Sign Out</button>
 		{:else}
-			<button class="btn variant-ghost-primary" on:click={() => signIn()}>Sign In</button>
+			<button class="btn variant-ghost-primary" on:click={() => signIn('github')}>Sign In</button>
 		{/if}
 	</div>
 </div>
