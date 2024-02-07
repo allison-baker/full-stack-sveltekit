@@ -13,10 +13,20 @@ export async function load() {
 		const database = client.db('sample_mflix')
         const collection = database.collection('movies')
 
-        const moviesArr = await collection.find({ year: 1985 }).toArray()
+        const moviesArr = await collection.find({
+			$and: [
+				{ year: 1985 },
+				{$or: [
+					{ rated: "PG" },
+					{ rated: "PG-13" },
+					{ rated: "R" }
+				]}
+			]
+		}).toArray()
         movies = moviesArr.map(movie => {
             return { ...movie, _id: (movie._id as ObjectId).toString() }
         })
+
         console.log(`Found ${moviesArr.length} movies.`)
 	} finally {
 		await client.close()
