@@ -1,38 +1,36 @@
-import { MongoClient, ObjectId } from 'mongodb';
-
-if (!process.env.MONGODB_URI) {
-	throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
-}
-
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
+import { ObjectId } from 'mongodb';
+import clientPromise from '$lib/mongodb/mongodb.client';
 
 export async function load() {
-    let movies
+	let movies;
+	let client;
 	try {
-		const database = client.db('sample_mflix')
-        const collection = database.collection('movies')
+		client = await clientPromise;
+		const database = client?.db('sample_mflix');
+		const collection = database?.collection('movies');
 
-        const moviesArr = await collection.find({
-			$and: [
-				{ year: 1985 },
-				{$or: [
-					{ rated: "PG" },
-					{ rated: "PG-13" },
-					{ rated: "R" }
-				]}
-			]
-		}).toArray()
-        movies = moviesArr.map(movie => {
-            return { ...movie, _id: (movie._id as ObjectId).toString() }
-        })
+		const moviesArr = await collection
+			?.find({
+				$and: [{ year: 1985 }, { $or: [{ rated: 'PG' }, { rated: 'PG-13' }, { rated: 'R' }] }]
+			})
+			.toArray();
+		movies = moviesArr?.map((movie) => {
+			return { ...movie, _id: (movie._id as ObjectId).toString() };
+		});
 
-        console.log(`Found ${moviesArr.length} movies.`)
-	} finally {
-		await client.close()
+		console.log(`Found ${moviesArr?.length} movies.`);
+	} catch (error) {
+		console.error('Failed to connect to MongoDB', error);
+		if (client) {
+			await client?.close();
+		}
+		return {
+			status: 500,
+			body: 'Failed to connect to MongoDB'
+		};
 	}
 	return {
 		status: 200,
 		body: movies
-	}
+	};
 }

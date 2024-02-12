@@ -8,7 +8,7 @@ if (!process.env.MONGODB_URI) {
 //const client = new MongoClient(uri);
 
 export async function GET(request: Request) {
-    // const body = await request.json()
-    // console.log(body)
-    return new Response('Hello world')
+	// const body = await request.json()
+	// console.log(body)
+	return new Response('Hello world');
 }

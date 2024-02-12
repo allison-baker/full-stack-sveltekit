@@ -18,17 +18,17 @@ const client = new MongoClient(uri, {
 export async function load() {
 	try {
 		// Connect the client to the server
-		await client.db('dwdd-3780-database').command({ ping: 1})
-		console.log('Pinged your deployment. You successfully connected to MongoDB!')
+		await client.db('dwdd-3780-database').command({ ping: 1 });
+		console.log('Pinged your deployment. You successfully connected to MongoDB!');
 	} finally {
-		await client.close()
+		await client.close();
 	}
 	return {
 		status: 200,
 		body: {
 			message: 'MongoDB connection successful'
 		}
-	}
+	};
 }
 
 // async function run() {
