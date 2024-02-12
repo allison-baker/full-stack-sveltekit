@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'development') {
 	};
 }
 
-export const handle = SvelteKitAuth({
+export const { handle } = SvelteKitAuth({
 	providers: [GitHub(githubConfig)],
 	adapter: MongoDBAdapter(clientPromise, {
 		databaseName: 'dwdd-3780-database'
