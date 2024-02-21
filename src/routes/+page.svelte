@@ -10,11 +10,12 @@
 	<div class="space-y-10 text-center flex flex-col items-center">
 		<h2 class="h2">Welcome to Skeleton.</h2>
 		{#if loggedIn}
-			<p>{$page.data.session?.user?.email}</p>
+			<p>Welcome, <span class="font-bold">{$page.data.session?.user?.name}</span>!</p>
 			<button class="btn variant-ghost-primary" on:click={() => signOut()}>Sign Out</button>
 			<button class="btn variant-ghost-secondary" on:click={() => goto('/movies')}>Movies</button>
 			<button class="btn variant-ghost-secondary" on:click={() => goto('/airbnb')}>Airbnb</button>
 		{:else}
+			<p>Sign in to view more!</p>
 			<button class="btn variant-ghost-primary" on:click={() => signIn('github')}>Sign In</button>
 		{/if}
 	</div>
