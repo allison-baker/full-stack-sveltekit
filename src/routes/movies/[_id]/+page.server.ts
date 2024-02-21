@@ -1,19 +1,19 @@
 import clientPromise from '$lib/mongodb/mongodb.client';
 import { ObjectId } from 'mongodb';
 
-// async function validateImgUrl(url: string): Promise<string | null> {
-// 	try {
-// 		const response = await fetch(url, { method: 'HEAD' });
-// 		if (response) {
-// 			return url;
-// 		} else {
-// 			return '/defaultMoviePoster.png';
-// 		}
-// 	} catch (error) {
-// 		console.error('Failed to validate img url', error);
-// 		return '/defaultMoviePoster.png';
-// 	}
-// }
+async function validateImgUrl(url: string): Promise<string | null> {
+	try {
+		const response = await fetch(url, { method: 'HEAD' });
+		if (response.ok) {
+			return url;
+		} else {
+			return '/default-movie.jpg';
+		}
+	} catch (error) {
+		console.error('Failed to validate img url', error);
+		return '/default-movie.jpg';
+	}
+}
 
 export async function load({ params }) {
 	const movieId = params._id;
@@ -28,8 +28,8 @@ export async function load({ params }) {
 		if (movie) {
 			movie = {
 				...movie,
-				_id: (movie._id as ObjectId).toString()
-				//poster: await validateImgUrl(movie.poster)
+				_id: (movie._id as ObjectId).toString(),
+				poster: await validateImgUrl(movie.poster)
 			};
 		}
 	} catch (error) {

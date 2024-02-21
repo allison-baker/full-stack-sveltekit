@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { signIn, signOut } from '@auth/sveltekit/client';
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 
 	let loggedIn = $page.data.session?.user;
 </script>
@@ -11,6 +12,8 @@
 		{#if loggedIn}
 			<p>{$page.data.session?.user?.email}</p>
 			<button class="btn variant-ghost-primary" on:click={() => signOut()}>Sign Out</button>
+			<button class="btn variant-ghost-secondary" on:click={() => goto('/movies')}>Movies</button>
+			<button class="btn variant-ghost-secondary" on:click={() => goto('/airbnb')}>Airbnb</button>
 		{:else}
 			<button class="btn variant-ghost-primary" on:click={() => signIn('github')}>Sign In</button>
 		{/if}
