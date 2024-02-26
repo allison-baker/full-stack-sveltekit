@@ -10,6 +10,8 @@
 	function iconClick(event: CustomEvent<{ index: number }>): void {
 		rating.current = event.detail.index;
 	}
+
+	console.log(data);
 </script>
 
 <div>
@@ -30,9 +32,17 @@
 			</fieldset>
 			<fieldset class="my-4">
 				<label for="rating" class="font-bold text-sm mb-2">Your Rating:</label>
-				<Ratings bind:value={rating.current} max={rating.max} interactive on:icon={iconClick} id="rating" justify="left">
+				<Ratings
+					bind:value={rating.current}
+					max={rating.max}
+					interactive
+					on:icon={iconClick}
+					id="rating"
+					justify="left"
+				>
 					<svelte:fragment slot="empty"><i class="fa-regular fa-star fa-xl"></i></svelte:fragment>
-					<svelte:fragment slot="half"><i class="fa-solid fa-star-half-stroke fa-xl"></i></svelte:fragment
+					<svelte:fragment slot="half"
+						><i class="fa-solid fa-star-half-stroke fa-xl"></i></svelte:fragment
 					>
 					<svelte:fragment slot="full"><i class="fa-solid fa-star fa-xl"></i></svelte:fragment>
 				</Ratings>
@@ -51,4 +61,5 @@
 			</fieldset>
 		</form>
 	</div>
+	<!-- SHOW AIRBNB LISTINGS HERE ATER LOAD() FUNCTION RETRIEVES -->
 </div>
