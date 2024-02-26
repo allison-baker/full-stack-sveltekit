@@ -9,6 +9,8 @@
 	import { onNavigate } from '$app/navigation';
 	import { Modal, getModalStore } from '@skeletonlabs/skeleton';
 	import type { ModalSettings, ModalComponent, ModalStore } from '@skeletonlabs/skeleton';
+	import { page } from '$app/stores';
+	import { signIn } from '@auth/sveltekit/client';
 
 	// Highlight JS
 	import hljs from 'highlight.js/lib/core';
@@ -59,6 +61,8 @@
 	function drawerOpen(): void {
 		drawerStore.open({});
 	}
+
+	let loggedIn = $page.data.session?.user;
 </script>
 
 <Modal />
@@ -89,7 +93,11 @@
 				</div>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<ThemeMenu on:click={() => (isDarkMode = !isDarkMode)} />
+				{#if loggedIn}
+					<ThemeMenu on:click={() => (isDarkMode = !isDarkMode)} />
+				{:else}
+					<button class="btn variant-ghost-primary" on:click={() => signIn('github')}>Sign In</button>
+				{/if}
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>

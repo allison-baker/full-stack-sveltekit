@@ -1,7 +1,7 @@
 import type { CustomThemeConfig } from '@skeletonlabs/tw-plugin';
 
 export const myCustomTheme: CustomThemeConfig = {
-	name: 'my-custom-theme',
+	name: 'custom',
 	properties: {
 		// =~= Theme Properties =~=
 		'--theme-font-family-base': `system-ui`,

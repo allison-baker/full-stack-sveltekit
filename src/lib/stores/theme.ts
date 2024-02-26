@@ -1,15 +1,14 @@
-import { writable } from 'svelte/store';
+import type { Writable } from 'svelte/store';
+import { localStorageStore } from '@skeletonlabs/skeleton';
 import { browser } from '$app/environment';
 
-const defaultValue = browser ? localStorage.getItem('theme') : 'my-custom-theme';
-const initialValue = browser ? localStorage.getItem('theme') && defaultValue : defaultValue;
+export const themeStore: Writable<string | null> = localStorageStore(
+	'themeStore',
+	browser ? document.body.dataset.theme ?? 'custom' : 'custom'
+);
 
-export const theme = writable(initialValue);
-
-theme.subscribe(value => {
-    if (browser) {
-        localStorage.setItem('theme', value as string);
-        //document.body.setAttribute('data-theme', value as string);
-        document.body.dataset.theme = value as string;
-    }
-})
+themeStore.subscribe((value) => {
+	if (browser) {
+		document.body.dataset.theme = value as string;
+	}
+});

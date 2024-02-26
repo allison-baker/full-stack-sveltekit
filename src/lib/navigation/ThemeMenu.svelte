@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { theme } from '$lib/stores/theme.ts';
+	import { themeStore } from '$lib/stores/theme.ts';
 	import { popup } from '@skeletonlabs/skeleton';
 	import type { PopupSettings } from '@skeletonlabs/skeleton';
 	import { ListBox, ListBoxItem } from '@skeletonlabs/skeleton';
@@ -40,25 +40,25 @@
 
 	<div>
 		<button class="btn variant-filled-tertiary w-56 justify-between" use:popup={popupCombobox}>
-			<span class="capitalize">{$theme ?? 'Theme'}</span>
+			<span class="capitalize">{$themeStore ?? 'Theme'}</span>
 			<span>↓</span>
 		</button>
 
 		<div class="card w-56 shadow-xl py-2" data-popup="popupCombobox">
 			<ListBox rounded="rounded-none">
-				<ListBoxItem bind:group={$theme} name="medium" value="my-custom-theme"
+				<ListBoxItem bind:group={$themeStore} name="medium" value="custom"
 					>Custom Theme</ListBoxItem
 				>
-				<ListBoxItem bind:group={$theme} name="medium" value="skeleton">Skeleton</ListBoxItem>
-				<ListBoxItem bind:group={$theme} name="medium" value="modern">Modern</ListBoxItem>
-				<ListBoxItem bind:group={$theme} name="medium" value="hamlindigo"
+				<ListBoxItem bind:group={$themeStore} name="medium" value="skeleton">Skeleton</ListBoxItem>
+				<ListBoxItem bind:group={$themeStore} name="medium" value="modern">Modern</ListBoxItem>
+				<ListBoxItem bind:group={$themeStore} name="medium" value="hamlindigo"
 					>Hamlindigo</ListBoxItem
 				>
-				<ListBoxItem bind:group={$theme} name="medium" value="rocket">Rocket</ListBoxItem>
-				<ListBoxItem bind:group={$theme} name="medium" value="sahara">Sahara</ListBoxItem>
-				<ListBoxItem bind:group={$theme} name="medium" value="gold-nouveau">Gold Nouveau</ListBoxItem>
-				<ListBoxItem bind:group={$theme} name="medium" value="vintage">Vintage</ListBoxItem>
-				<ListBoxItem bind:group={$theme} name="medium" value="seafoam">Seafoam</ListBoxItem>
+				<ListBoxItem bind:group={$themeStore} name="medium" value="rocket">Rocket</ListBoxItem>
+				<ListBoxItem bind:group={$themeStore} name="medium" value="sahara">Sahara</ListBoxItem>
+				<ListBoxItem bind:group={$themeStore} name="medium" value="gold-nouveau">Gold Nouveau</ListBoxItem>
+				<ListBoxItem bind:group={$themeStore} name="medium" value="vintage">Vintage</ListBoxItem>
+				<ListBoxItem bind:group={$themeStore} name="medium" value="seafoam">Seafoam</ListBoxItem>
 			</ListBox>
 			<div class="arrow bg-surface-100-800-token" />
 		</div>

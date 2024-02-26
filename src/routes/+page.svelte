@@ -11,9 +11,10 @@
 		<h2 class="h2">Welcome to Skeleton.</h2>
 		{#if loggedIn}
 			<p>Welcome, <span class="font-bold">{$page.data.session?.user?.name}</span>!</p>
-			<button class="btn variant-ghost-primary" on:click={() => signOut()}>Sign Out</button>
-			<button class="btn variant-ghost-secondary" on:click={() => goto('/movies')}>Movies</button>
-			<button class="btn variant-ghost-secondary" on:click={() => goto('/airbnb')}>Airbnb</button>
+			<section class="flex flex-row gap-4">
+				<button class="btn variant-ghost-secondary" on:click={() => goto('/movies')}>Movies</button>
+				<button class="btn variant-ghost-secondary" on:click={() => goto('/airbnb')}>Airbnb</button>
+			</section>
 		{:else}
 			<p>Sign in to view more!</p>
 			<button class="btn variant-ghost-primary" on:click={() => signIn('github')}>Sign In</button>
