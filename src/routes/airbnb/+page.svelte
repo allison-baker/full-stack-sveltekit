@@ -1,6 +1,7 @@
 <script lang="ts">
 	export let data: any;
 	import { Ratings } from '@skeletonlabs/skeleton';
+	import AirbnbListing from '$lib/components/AirbnbListing.svelte';
 
 	let rating = {
 		current: 3,
@@ -11,7 +12,7 @@
 		rating.current = event.detail.index;
 	}
 
-	console.log(data);
+	$: console.log(data.body);
 </script>
 
 <div>
@@ -59,7 +60,10 @@
 					></textarea>
 				</label>
 			</fieldset>
+			<button class="btn variant-ghost-primary mt-4" type="submit">Submit Review</button>
 		</form>
 	</div>
-	<!-- SHOW AIRBNB LISTINGS HERE ATER LOAD() FUNCTION RETRIEVES -->
+	{#if data}
+		<AirbnbListing listings={data.body} />
+	{/if}
 </div>

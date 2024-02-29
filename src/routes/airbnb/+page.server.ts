@@ -4,7 +4,7 @@ import clientPromise from '$lib/mongodb/mongodb.client';
 function convertDec128ToNum(doc: unknown): unknown {
 	if (typeof doc === 'object' && doc !== null) {
 		for (const key in doc as Record<string, unknown>) {
-			const value = doc as Record<string, unknown>;
+			const value = (doc as Record<string, unknown>)[key];
 			if (value instanceof Decimal128) {
 				(doc as Record<string, unknown>)[key] = value.toString();
 			} else if (typeof value === 'object' && value !== null) {
@@ -22,7 +22,7 @@ export async function load() {
 	try {
 		client = await clientPromise;
 		const database = client?.db('sample_airbnb');
-		const collection = database?.collection('listingsAndReview');
+		const collection = database?.collection('listingsAndReviews');
 
 		const bnbsArr = await collection?.find().limit(10).toArray();
 
