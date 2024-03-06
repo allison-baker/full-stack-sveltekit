@@ -41,7 +41,7 @@
 		dispatch('showReviewForm', { show: true, name: listing.name });
 	}
 
-	function showReviews = async (listing: Listing) => {
+	const showReviews = async (listing: Listing) => {
 		const modal: ModalSettings = {
 			type: 'alert',
 			// Data
@@ -64,7 +64,7 @@
 				><i class="fa-regular fa-star fa-lg text-surface-100-800-token"></i></button>
 			</div>
 			<p class="text-sm mb-1">{listing.summary}</p>
-			<button class="btn variant-ghost-primary" on:click={showReviews}>Show Reviews</button>
+			<button class="btn variant-ghost-primary" on:click={() => showReviews(listing)}>Show Reviews</button>
 		</div>
 	{/each}
 </div>
