@@ -5,12 +5,10 @@
 	import { fly, slide } from 'svelte/transition';
 
 	export let data: any;
+	export let form: any;
+	let divScroll: any;
 
-	let rating = {
-		current: 3,
-		max: 5
-	};
-
+	let rating = { current: 3, max: 5 };
 	let formVisible = true;
 	let listingName = '';
 
@@ -24,16 +22,23 @@
 	function handleReview(event: CustomEvent<{ show: boolean; name: string }>) {
 		formVisible = event.detail.show;
 		listingName = event.detail.name;
+		divScroll.scrollIntoView({ behavior: 'smooth '});
 	}
 </script>
 
-<div>
+<div bind:this={divScroll}>
 	{#if formVisible}
 		<div
 			class="max-w-3xl mx-auto my-4 bg-surface-100-800-token rounded-md shadow-md p-4"
 			in:fly={{ y: 200 }}
 			out:slide
 		>
+			{#if form?.error}
+				<div class="bg-red-100 border-red-500 text-red-700 px-4 py-3 rounded relative" role="alert">
+					<strong class="font-bold">Error!</strong>
+					<span class="block sm:inline">{form.error}</span>
+				</div>
+			{/if}
 			<form method="POST" action="?/submitReview">
 				<fieldset>
 					<input
