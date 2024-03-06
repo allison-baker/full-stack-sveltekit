@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+
 	const dispatch = createEventDispatcher();
+	const modalStore = getModalStore();
 
 	export let listings: [] = [];
 
@@ -37,6 +40,17 @@
 	function showReviewForm(listing: Listing): void {
 		dispatch('showReviewForm', { show: true, name: listing.name });
 	}
+
+	function showReviews = async (listing: Listing) => {
+		const modal: ModalSettings = {
+			type: 'alert',
+			// Data
+			title: 'Reviews',
+			body: 'Reviews are not available at this time.',
+			buttonTextCancel: 'Close',
+		};
+		modalStore.trigger(modal);
+	}
 </script>
 
 <div class="max-w-3xl mx-auto my-4 bg-surface-100-800-token rounded-md shadow-md p-4">
@@ -50,6 +64,7 @@
 				><i class="fa-regular fa-star fa-lg text-surface-100-800-token"></i></button>
 			</div>
 			<p class="text-sm mb-1">{listing.summary}</p>
+			<button class="btn variant-ghost-primary" on:click={showReviews}>Show Reviews</button>
 		</div>
 	{/each}
 </div>

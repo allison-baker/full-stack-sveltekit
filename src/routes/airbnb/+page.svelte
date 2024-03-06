@@ -6,7 +6,7 @@
 
 	export let data: any;
 	export let form: any;
-	let divScroll: any;
+	let divScroll: HTMLElement;
 
 	let rating = { current: 3, max: 5 };
 	let formVisible = true;
@@ -22,7 +22,7 @@
 	function handleReview(event: CustomEvent<{ show: boolean; name: string }>) {
 		formVisible = event.detail.show;
 		listingName = event.detail.name;
-		divScroll.scrollIntoView({ behavior: 'smooth '});
+		divScroll.scrollIntoView({ behavior: 'smooth'});
 	}
 </script>
 
@@ -39,6 +39,7 @@
 					<span class="block sm:inline">{form.error}</span>
 				</div>
 			{/if}
+			
 			<form method="POST" action="?/submitReview">
 				<fieldset>
 					<input

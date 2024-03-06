@@ -60,7 +60,7 @@ async function getUserID(username: string) {
 		if (!user) throw new Error('User not found');
 		return user?._id;
 	} catch (error) {
-		throw new Error('Failed to get user ID')
+		throw new Error('Failed to get user ID');
 	}
 }
 
@@ -73,7 +73,7 @@ async function getListingID(listingName: string) {
 		if (!listing) throw new Error('Listing not found');
 		return listing?._id;
 	} catch (error) {
-		throw new Error('Failed to get user ID')
+		throw new Error('Failed to get user ID');
 	}
 }
 
@@ -83,42 +83,43 @@ async function addReview(username: string, rating: number, review: string, listi
 	if (review === '') throw new Error('Review comment is required.');
 	if (listingName === '') throw new Error('Please select a listing before submitting a review.');
 
-	const userID = getUserID(username);
-	const listingID = getListingID(listingName);
-	
+	const userID = await getUserID(username);
+	const listingID = await getListingID(listingName);
+
 	try {
 		client = await clientPromise;
-		const collection = client?.db('sample_airbnb').collection('listingsAndReviews');
-		// await collection?.reviews.insertOne({
-		// 	userID,
-		// 	listingID,
-		// 	rating,
-		// 	review
-		// })
+		const collection = client?.db('dwdd-3780-database').collection('reviews');
+		// const collection = client?.db('sample_airbnb').collection('listingsAndReviews');
+		await collection?.insertOne({
+			userID,
+			listingID,
+			rating,
+			review
+		})
 	} catch (error) {
-		throw new Error('Failed to add review')
+		throw new Error('Failed to add review');
 	}
 }
 
 export const actions = {
 	submitReview: async ({ request }) => {
 		const data = await request.formData();
-		const username = data.get('username') as string
-		const rating = data.get('ratingValue')
-		const listingName = data.get('listingName') as string
-		const review = data.get('review') as string
+		const username = data.get('username') as string;
+		const rating = data.get('ratingValue');
+		const listingName = data.get('listingName') as string;
+		const review = data.get('review') as string;
 
 		try {
-			addReview(username, Number(rating), review, listingName)
+			addReview(username, Number(rating), review, listingName);
 			return {
 				status: 200,
 				body: {
 					message: 'Review added successfully'
 				}
-			}
+			};
 		} catch (error) {
 			if (error instanceof Error) {
-				return fail(422, { error: error.message })
+				return fail(422, { error: error.message });
 			}
 		}
 	}
