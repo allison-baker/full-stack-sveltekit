@@ -58,13 +58,15 @@
 		<div class="card my-4 mx-2 p-4 bg-surface-200-700-token">
 			<div class="flex justify-between">
 				<h2 class="text-xl font-bold mb-1">{listing.name}</h2>
-				<button
-					class="btn-icon btn-icon-sm bg-secondary-600-300-token"
-					on:click={() => showReviewForm(listing)}
-				><i class="fa-regular fa-star fa-lg text-surface-100-800-token"></i></button>
 			</div>
 			<p class="text-sm mb-1">{listing.summary}</p>
-			<button class="btn variant-ghost-primary" on:click={() => showReviews(listing)}>Show Reviews</button>
+			<div class="flex flex-row justify-between align-center mt-4">
+				<button class="btn variant-ghost-primary" on:click={() => showReviews(listing)}>Show Reviews</button>
+				<button
+						class="btn-icon btn-icon-md bg-secondary-600-300-token"
+						on:click={() => showReviewForm(listing)}
+					><i class="fa-regular fa-star fa-lg text-surface-100-800-token"></i></button>
+			</div>
 		</div>
 	{/each}
 </div>

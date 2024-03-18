@@ -51,7 +51,7 @@ export async function load() {
 	};
 }
 
-async function getUserID(username: string) {
+async function getUserID(username: string): Promise<ObjectId> {
 	let client;
 	try {
 		client = await clientPromise;
@@ -64,7 +64,7 @@ async function getUserID(username: string) {
 	}
 }
 
-async function getListingID(listingName: string) {
+async function getListingID(listingName: string): Promise<ObjectId> {
 	let client;
 	try {
 		client = await clientPromise;
@@ -78,7 +78,6 @@ async function getListingID(listingName: string) {
 }
 
 async function addReview(username: string, rating: number, review: string, listingName: string) {
-	let client;
 	if (username === '') throw new Error('Must be signed in to leave a review.');
 	if (review === '') throw new Error('Review comment is required.');
 	if (listingName === '') throw new Error('Please select a listing before submitting a review.');
@@ -86,18 +85,41 @@ async function addReview(username: string, rating: number, review: string, listi
 	const userID = await getUserID(username);
 	const listingID = await getListingID(listingName);
 
+	const client = await clientPromise;
 	try {
-		client = await clientPromise;
-		const collection = client?.db('dwdd-3780-database').collection('reviews');
-		// const collection = client?.db('sample_airbnb').collection('listingsAndReviews');
-		await collection?.insertOne({
-			userID,
-			listingID,
-			rating,
-			review
+		const collection = client?.db('sample_airbnb').collection('listingsAndReviews');
+		await collection?.updateOne({ _id: listingID }, {
+			$push: {
+				reviews: {
+					_id: new ObjectId().toString(),
+					date: new Date(),
+					reviewer_id: userID.toString(),
+					listing_id: listingID.toString(),
+					reviewer_name: username,
+					comments: review
+				}
+			}
 		})
 	} catch (error) {
-		throw new Error('Failed to add review');
+		throw new Error('Failed to add review to airbnb listing');
+	}
+
+	try {
+		const collection = client?.db('dwdd-3780-database').collection('users');
+		await collection?.updateOne({ _id: userID }, {
+			$push: {
+				reviews: {
+					_id: new ObjectId(),
+					date: new Date(),
+					listing_id: listingID,
+					listing_name: listingName,
+					comments: review,
+					rating,
+				}
+			}
+		})
+	} catch (error) {
+		throw new Error('Failed to add review to user file')
 	}
 }
 
