@@ -3,6 +3,7 @@
 	import AirbnbListing from '$lib/components/AirbnbListing.svelte';
 	import { page } from '$app/stores';
 	import { fly, slide } from 'svelte/transition';
+	import ReviewCarousel from '$lib/components/ReviewCarousel.svelte';
 
 	export let data: any;
 	export let form: any;
@@ -19,10 +20,25 @@
 	function handleCancel() {
 		formVisible = false;
 	}
+
 	function handleReview(event: CustomEvent<{ show: boolean; name: string }>) {
 		formVisible = event.detail.show;
 		listingName = event.detail.name;
 		divScroll.scrollIntoView({ behavior: 'smooth'});
+	}
+
+	let reviewsVisible = false;
+	let reviewsName = '';
+	let currReviews: Array<Object>;
+	
+	function handleCarousel(event: CustomEvent<{show: boolean; name: string; reviews: Array<Object> }>) {
+		reviewsVisible = event.detail.show;
+		reviewsName = event.detail.name;
+		currReviews = event.detail.reviews;
+	}
+
+	function hideReviews() {
+		reviewsVisible = false;
 	}
 </script>
 
@@ -90,6 +106,10 @@
 		</div>
 	{/if}
 	{#if data}
-		<AirbnbListing listings={data.body} on:showReviewForm={handleReview} />
+		<AirbnbListing listings={data.body} on:showReviewForm={handleReview} on:showListingReviews={handleCarousel} />
+	{/if}
+	{#if reviewsVisible}
+		<button class="btn variant-ghost-surface mx-4" on:click={hideReviews}>Hide Reviews</button>
+		<ReviewCarousel reviews={currReviews} name={reviewsName} />
 	{/if}
 </div>

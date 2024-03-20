@@ -3,7 +3,7 @@
 	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 
 	const dispatch = createEventDispatcher();
-	const modalStore = getModalStore();
+	// const modalStore = getModalStore();
 
 	export let listings: [] = [];
 
@@ -18,6 +18,7 @@
 		bedrooms: number;
 		bathrooms: number;
 		security_deposit: number;
+		reviews: Array<Object>;
 	}
 
 	$: convertedListings = listings.map((item: any) => convertToListing(item));
@@ -33,7 +34,8 @@
 			price: data.price || 0,
 			bedrooms: data.bedrooms || 0,
 			bathrooms: data.bathrooms || 0,
-			security_deposit: data.security_deposit || 0
+			security_deposit: data.security_deposit || 0,
+			reviews: data.reviews || []
 		};
 	}
 
@@ -42,14 +44,7 @@
 	}
 
 	const showReviews = async (listing: Listing) => {
-		const modal: ModalSettings = {
-			type: 'alert',
-			// Data
-			title: 'Reviews',
-			body: 'Reviews are not available at this time.',
-			buttonTextCancel: 'Close',
-		};
-		modalStore.trigger(modal);
+		dispatch('showListingReviews', { show: true, name: listing.name, reviews: listing.reviews });
 	}
 </script>
 
