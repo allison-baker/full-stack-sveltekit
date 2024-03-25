@@ -17,8 +17,6 @@ export async function load() {
 		movies = moviesArr?.map((movie) => {
 			return { ...movie, _id: (movie._id as ObjectId).toString() };
 		});
-
-		console.log(`Found ${moviesArr?.length} movies.`);
 	} catch (error) {
 		console.error('Failed to connect to MongoDB', error);
 		if (client) {
