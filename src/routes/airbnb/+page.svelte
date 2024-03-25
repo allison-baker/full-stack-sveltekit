@@ -10,8 +10,8 @@
 	let divScroll: HTMLElement;
 
 	let rating = { current: 3, max: 5 };
-	let formVisible = true;
-	let listingName = '';
+	let formVisible = false;
+	let listingName: string;
 
 	function iconClick(event: CustomEvent<{ index: number }>): void {
 		rating.current = event.detail.index;
@@ -24,14 +24,16 @@
 	function handleReview(event: CustomEvent<{ show: boolean; name: string }>) {
 		formVisible = event.detail.show;
 		listingName = event.detail.name;
-		divScroll.scrollIntoView({ behavior: 'smooth'});
+		divScroll.scrollIntoView({ behavior: 'smooth' });
 	}
 
 	let reviewsVisible = false;
 	let reviewsName = '';
 	let currReviews: Array<Object>;
-	
-	function handleCarousel(event: CustomEvent<{show: boolean; name: string; reviews: Array<Object> }>) {
+
+	function handleCarousel(
+		event: CustomEvent<{ show: boolean; name: string; reviews: Array<Object> }>
+	) {
 		reviewsVisible = event.detail.show;
 		reviewsName = event.detail.name;
 		currReviews = event.detail.reviews;
@@ -55,18 +57,11 @@
 					<span class="block sm:inline">{form.error}</span>
 				</div>
 			{/if}
-			
+
 			<form method="POST" action="?/submitReview">
-				<fieldset>
-					<input
-						id="username"
-						name="username"
-						type="hidden"
-						value={$page.data.session?.user?.name}
-					/>
-					<input id="listingName" name="listingName" type="hidden" value={listingName} />
-					<input id="ratingValue" name="ratingValue" type="hidden" value={rating.current} />
-				</fieldset>
+				<input id="username" name="username" type="hidden" value={$page.data.session?.user?.name} />
+				<input id="listingName" name="listingName" type="hidden" value={listingName} />
+				<input id="ratingValue" name="ratingValue" type="hidden" value={rating.current} />
 				<fieldset class="my-4">
 					<h1 class="mb-4 text-xl text-primary-700-200-token">
 						Review of: <span class="font-bold">{listingName}</span>
@@ -106,10 +101,16 @@
 		</div>
 	{/if}
 	{#if data}
-		<AirbnbListing listings={data.body} on:showReviewForm={handleReview} on:showListingReviews={handleCarousel} />
+		<AirbnbListing
+			listings={data.body}
+			on:showReviewForm={handleReview}
+			on:showListingReviews={handleCarousel}
+		/>
 	{/if}
 	{#if reviewsVisible}
-		<button class="btn variant-ghost-surface mx-4" on:click={hideReviews}>Hide Reviews</button>
-		<ReviewCarousel reviews={currReviews} name={reviewsName} />
+		<div class="absolute top-16 left-0 bg-surface-100-800-token py-8 px-4 w-full">
+			<button class="btn variant-ghost-surface mx-4" on:click={hideReviews}>Hide Reviews</button>
+			<ReviewCarousel reviews={currReviews} name={reviewsName} />
+		</div>
 	{/if}
 </div>

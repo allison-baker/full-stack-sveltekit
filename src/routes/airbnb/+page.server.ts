@@ -25,7 +25,7 @@ export async function load() {
 		const database = client?.db('sample_airbnb');
 		const collection = database?.collection('listingsAndReviews');
 
-		const bnbsArr = await collection?.find().limit(10).toArray();
+		const bnbsArr = await collection?.find().limit(20).toArray();
 
 		const decimalConvertedDocs = bnbsArr?.map((doc) => convertDec128ToNum(doc));
 
@@ -96,7 +96,8 @@ async function addReview(username: string, rating: number, review: string, listi
 					reviewer_id: userID.toString(),
 					listing_id: listingID.toString(),
 					reviewer_name: username,
-					comments: review
+					comments: review,
+					rating
 				}
 			}
 		})

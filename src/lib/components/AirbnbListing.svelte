@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 
 	const dispatch = createEventDispatcher();
 	// const modalStore = getModalStore();
