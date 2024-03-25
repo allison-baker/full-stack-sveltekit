@@ -36,13 +36,13 @@ export async function load() {
 			};
 		});
 	} catch (error) {
-		console.error('Failed to connect to MongoDB', error);
+		console.error('Failed to connect to AirBNB database', error);
 		if (client) {
 			await client.close();
 		}
 		return {
 			status: 500,
-			body: 'Failed to connect to MongoDB'
+			body: 'Failed to connect to AirBNB database'
 		};
 	}
 	return {
@@ -60,7 +60,7 @@ async function getUserID(username: string): Promise<ObjectId> {
 		if (!user) throw new Error('User not found');
 		return user?._id;
 	} catch (error) {
-		throw new Error('Failed to get user ID');
+		throw new Error('Must be signed in to leave a review.');
 	}
 }
 
@@ -73,14 +73,12 @@ async function getListingID(listingName: string): Promise<ObjectId> {
 		if (!listing) throw new Error('Listing not found');
 		return listing?._id;
 	} catch (error) {
-		throw new Error('Failed to get user ID');
+		throw new Error('Please select a listing before submitting a review.');
 	}
 }
 
 async function addReview(username: string, rating: number, review: string, listingName: string) {
-	if (username === '') throw new Error('Must be signed in to leave a review.');
 	if (review === '') throw new Error('Review comment is required.');
-	if (listingName === '') throw new Error('Please select a listing before submitting a review.');
 
 	const userID = await getUserID(username);
 	const listingID = await getListingID(listingName);
@@ -110,9 +108,9 @@ async function addReview(username: string, rating: number, review: string, listi
 		await collection?.updateOne({ _id: userID }, {
 			$push: {
 				reviews: {
-					_id: new ObjectId(),
+					_id: new ObjectId().toString(),
 					date: new Date(),
-					listing_id: listingID,
+					listing_id: listingID.toString(),
 					listing_name: listingName,
 					comments: review,
 					rating,
@@ -133,7 +131,7 @@ export const actions = {
 		const review = data.get('review') as string;
 
 		try {
-			addReview(username, Number(rating), review, listingName);
+			await addReview(username, Number(rating), review, listingName);
 			return {
 				status: 200,
 				body: {

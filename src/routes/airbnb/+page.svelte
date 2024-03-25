@@ -45,19 +45,18 @@
 </script>
 
 <div bind:this={divScroll}>
+	{#if form?.error}
+		<div class="bg-red-100 border-red-500 text-red-700 px-4 py-3 rounded relative" role="alert">
+			<strong class="font-bold">Error!</strong>
+			<span class="block sm:inline">{form.error}</span>
+		</div>
+	{/if}
 	{#if formVisible}
 		<div
-			class="max-w-3xl mx-auto my-4 bg-surface-100-800-token rounded-md shadow-md p-4"
+			class="max-w-[1200px] mx-auto my-4 bg-surface-100-800-token rounded-md shadow-md p-4"
 			in:fly={{ y: 200 }}
 			out:slide
 		>
-			{#if form?.error}
-				<div class="bg-red-100 border-red-500 text-red-700 px-4 py-3 rounded relative" role="alert">
-					<strong class="font-bold">Error!</strong>
-					<span class="block sm:inline">{form.error}</span>
-				</div>
-			{/if}
-
 			<form method="POST" action="?/submitReview">
 				<input id="username" name="username" type="hidden" value={$page.data.session?.user?.name} />
 				<input id="listingName" name="listingName" type="hidden" value={listingName} />
@@ -101,6 +100,11 @@
 		</div>
 	{/if}
 	{#if data}
+		<h1
+			class="max-w-[1200px] mx-auto my-4 text-3xl uppercase pb-2 border-b-2 border-primary-600-300-token"
+		>
+			Airbnbs
+		</h1>
 		<AirbnbListing
 			listings={data.body}
 			on:showReviewForm={handleReview}

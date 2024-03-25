@@ -14,6 +14,7 @@
 			<section class="flex flex-row gap-4">
 				<button class="btn variant-ghost-secondary" on:click={() => goto('/movies')}>Movies</button>
 				<button class="btn variant-ghost-secondary" on:click={() => goto('/airbnb')}>Airbnb</button>
+				<button class="btn variant-ghost-secondary" on:click={() => goto('/sales')}>Sales</button>
 			</section>
 		{:else}
 			<p>Sign in to view more!</p>

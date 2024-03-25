@@ -44,22 +44,27 @@
 
 	const showReviews = async (listing: Listing) => {
 		dispatch('showListingReviews', { show: true, name: listing.name, reviews: listing.reviews });
-	}
+	};
 </script>
 
-<div class="max-w-3xl mx-auto my-4 bg-surface-100-800-token rounded-md shadow-md p-4">
+<div
+	class="max-w-[1200px] mx-auto my-4 bg-surface-100-800-token rounded-md shadow-md p-4 grid grid-cols-2 gap-4"
+>
 	{#each convertedListings as listing}
-		<div class="card my-4 mx-2 p-4 bg-surface-200-700-token">
-			<div class="flex justify-between">
+		<div class="card p-4 bg-surface-200-700-token flex flex-col justify-between">
+			<div>
 				<h2 class="text-xl font-bold mb-1">{listing.name}</h2>
+				<p class="text-sm mb-1">{listing.summary}</p>
 			</div>
-			<p class="text-sm mb-1">{listing.summary}</p>
 			<div class="flex flex-row justify-between align-center mt-4">
-				<button class="btn variant-ghost-primary" on:click={() => showReviews(listing)}>Show Reviews</button>
+				<button class="btn variant-ghost-primary" on:click={() => showReviews(listing)}
+					>Show Reviews</button
+				>
 				<button
-						class="btn-icon btn-icon-md bg-secondary-600-300-token"
-						on:click={() => showReviewForm(listing)}
-					><i class="fa-regular fa-star fa-lg text-surface-100-800-token"></i></button>
+					class="btn-icon btn-icon-md bg-secondary-600-300-token"
+					on:click={() => showReviewForm(listing)}
+					><i class="fa-regular fa-star fa-lg text-surface-100-800-token"></i></button
+				>
 			</div>
 		</div>
 	{/each}
