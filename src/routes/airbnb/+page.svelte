@@ -44,7 +44,7 @@
 	}
 </script>
 
-<div bind:this={divScroll}>
+<div bind:this={divScroll} class="max-w-[1200px] mx-auto">
 	{#if form?.error}
 		<div class="bg-red-100 border-red-500 text-red-700 px-4 py-3 rounded relative" role="alert">
 			<strong class="font-bold">Error!</strong>
@@ -101,7 +101,7 @@
 	{/if}
 	{#if data}
 		<h1
-			class="max-w-[1200px] mx-auto my-4 text-3xl uppercase pb-2 border-b-2 border-primary-600-300-token"
+			class="m-4 text-3xl uppercase pb-2 border-b-2 border-primary-600-300-token"
 		>
 			Airbnbs
 		</h1>

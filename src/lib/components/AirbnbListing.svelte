@@ -48,7 +48,7 @@
 </script>
 
 <div
-	class="max-w-[1200px] mx-auto my-4 bg-surface-100-800-token rounded-md shadow-md p-4 grid grid-cols-2 gap-4"
+	class="m-4 bg-surface-100-800-token rounded-md shadow-md p-4 grid grid-cols-2 gap-4"
 >
 	{#each convertedListings as listing}
 		<div class="card p-4 bg-surface-200-700-token flex flex-col justify-between">
