@@ -19,10 +19,7 @@ export async function GET() {
 		if (client) {
 			await client?.close();
 		}
-		return {
-			status: 500,
-			body: 'Failed to connect to MongoDB'
-		};
+		return new Response(JSON.stringify('Failed to connect to MongoDB'), { status: 500 });
 	}
 	return new Response(JSON.stringify(sales), { status: 200 });
 }
@@ -36,16 +33,13 @@ export async function POST({ request }) {
 		client = await clientPromise;
 		const database = client?.db('sample_supplies');
 		const collection = database?.collection('stats');
-		collection?.insertMany(reqBody);
+		collection?.insertOne(reqBody);
 	} catch (error) {
 		console.error('Failed to connect to MongoDB', error);
 		if (client) {
 			await client?.close();
 		}
-		return {
-			status: 500,
-			body: 'Failed to connect to MongoDB'
-		};
+		return new Response(JSON.stringify('Failed to connect to MongoDB'), { status: 500 });
 	}
 
 	return new Response(JSON.stringify('Success!'), { status: 200 });
