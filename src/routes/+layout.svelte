@@ -96,7 +96,9 @@
 				{#if loggedIn}
 					<ThemeMenu on:click={() => (isDarkMode = !isDarkMode)} />
 				{:else}
-					<button class="btn variant-ghost-primary" on:click={() => signIn('github')}>Sign In</button>
+					<button class="btn variant-ghost-primary" on:click={() => signIn('github')}
+						>Sign In</button
+					>
 				{/if}
 			</svelte:fragment>
 		</AppBar>
