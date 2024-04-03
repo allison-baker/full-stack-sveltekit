@@ -37,7 +37,7 @@
 				class="card min-w-[200px] max-w-64 h-64 p-4 flex flex-col bg-surface-50-900-token shadow-sm"
 			>
 				{#if review.rating}
-					<Ratings bind:value={rating.current} max={rating.max} id="rating" justify="left">
+					<Ratings bind:value={review.rating} max={rating.max} id="rating" justify="left">
 						<svelte:fragment slot="empty"><i class="fa-regular fa-star fa-xl"></i></svelte:fragment>
 						<svelte:fragment slot="half"
 							><i class="fa-solid fa-star-half-stroke fa-xl"></i></svelte:fragment
