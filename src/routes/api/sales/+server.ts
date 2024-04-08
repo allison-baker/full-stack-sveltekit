@@ -1,7 +1,11 @@
 import { ObjectId } from 'mongodb';
 import clientPromise from '$lib/mongodb/mongodb.client';
 
-export async function GET() {
+export async function GET({ url }) {
+	const itemName = url.searchParams.get('itemName')
+	// const coupon = url.searchParams.get('coupon')
+	// const age = url.searchParams.get('age')
+
 	let sales;
 	let client;
 	try {
@@ -9,7 +13,17 @@ export async function GET() {
 		const database = client?.db('sample_supplies');
 		const collection = database?.collection('sales');
 
-		const salesArr = await collection?.find().toArray();
+		let salesArr = await collection?.find().toArray();
+
+		if (itemName) {
+			salesArr = salesArr?.filter((sale) => sale.items.find((item: { name: string; }) => item.name === itemName));
+		}
+		// if (coupon) {
+		// 	salesArr = salesArr?.filter((sale) => String(sale.couponUsed) == coupon);
+		// }
+		// if (age) {
+		// 	salesArr = salesArr?.filter((sale) => sale.customer.age === Number(age));
+		// }
 
 		sales = salesArr?.map((sale) => {
 			return { ...sale, _id: (sale._id as ObjectId).toString() };
