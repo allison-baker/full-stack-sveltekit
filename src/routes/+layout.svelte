@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.postcss';
-	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
+	import { AppShell, AppBar, Toast } from '@skeletonlabs/skeleton';
 	import { initializeStores } from '@skeletonlabs/skeleton';
 	import ThemeMenu from '$lib/navigation/ThemeMenu.svelte';
 	import SideNav from '$lib/navigation/SideNav.svelte';
@@ -66,6 +66,8 @@
 </script>
 
 <Modal />
+
+<Toast />
 
 <Drawer width="w-56">
 	<SideNav />

@@ -1,6 +1,6 @@
 import { ObjectId, Decimal128 } from 'mongodb';
 import clientPromise from '$lib/mongodb/mongodb.client';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 
 function convertDec128ToNum(doc: unknown): unknown {
 	if (typeof doc === 'object' && doc !== null) {
@@ -16,7 +16,12 @@ function convertDec128ToNum(doc: unknown): unknown {
 	return doc;
 }
 
-export async function load() {
+export async function load(event) {
+	const session = await event.locals.auth()
+	if(!session?.user) {
+		throw redirect(303, '/')
+	}
+	
 	let airbnb;
 	let client;
 

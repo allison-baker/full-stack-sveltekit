@@ -2,6 +2,16 @@
 	import { ListBox, ListBoxItem } from '@skeletonlabs/skeleton';
 	import Chart from 'chart.js/auto';
 	import { onMount } from 'svelte';
+	import type { ToastSettings, ToastStore } from '@skeletonlabs/skeleton';
+	import { getToastStore } from '@skeletonlabs/skeleton';
+	import { Ratings } from '@skeletonlabs/skeleton';
+
+	let rating = {
+		current: NaN,
+		max: 5
+	}
+
+	const toastStore = getToastStore();
 
 	let allSalesData: any = [];
 	$: uniqueStoreLocations = [...new Set(allSalesData.map((sale: any) => sale.storeLocation))];
@@ -49,8 +59,15 @@
 	}
 
 	let itemName: string = '';
-	let coupon: boolean = false;
-	let age: number;
+	let coupon: string = '';
+	let age: string = '';
+	let satisfaction: string = '';
+	let gender: string = '';
+
+	function iconClick(event: CustomEvent<{ index: number }>): void {
+		satisfaction = String(event.detail.index);
+		rating.current = event.detail.index;
+	}
 
 	async function getSalesData() {
 		// Reset all data so screen appears in default state while loading new data
@@ -63,14 +80,28 @@
 		singleLocation = '';
 
 		// Fetch new data from API
-		const response = await fetch(`/api/sales/?itemName=${itemName}&coupon=${coupon}&age=${age}`);
+		const response = await fetch(`/api/sales/?itemName=${itemName}&coupon=${coupon}&age=${age}&satisfaction=${satisfaction}&gender=${gender}`);
 		const data = await response.json();
 		allSalesData = data;
 
+		if (allSalesData.length !== 0) {
+			toastStore.trigger({
+				message: `Total Sales: ${allSalesData.length}`,
+				timeout: 4000
+			});
+		} else {
+			toastStore.trigger({
+				message: `No sales data to display`,
+				timeout: 4000
+			});
+		}
+
 		// Reset form fields
 		itemName = '';
-		coupon = false;
-		age = NaN
+		coupon = '';
+		age = '';
+		satisfaction = '';
+		gender = '';
 	}
 
 	let statsTitle = '[Please GET Sales Data]';
@@ -127,20 +158,49 @@
 				placeholder="Item Name"
 			/>
 		</label>
-		<label for="coupon" class="font-bold text-sm block mt-4">
-			<input
-				class="checkbox mr-1"
-				type="checkbox"
-				name="coupon"
-				bind:checked={coupon}
-				placeholder="Coupon"
-			/>
-			Use Coupon?
-		</label>
+
+		<p class="font-bold text-sm mt-4">Coupon Used:</p>
+		<label for="yes" class="block mt-4">
+			<input type="radio" name="coupon" id="yes" value="true" bind:group={coupon} /> Yes</label
+		>
+		<label for="no" class="block mt-4">
+			<input type="radio" name="coupon" id="no" value="false" bind:group={coupon} /> No</label
+		>
+		<label for="all" class="block mt-4">
+			<input type="radio" name="coupon" id="all" value="" bind:group={coupon} /> All</label
+		>
+
 		<label for="age" class="block font-bold text-sm mt-4">
 			Age: <span class="font-normal">{age}</span>
 			<input class="mt-2" type="range" name="age" max="100" bind:value={age} />
 		</label>
+
+		<label for="satisfaction" class="font-bold text-sm mt-4">Satisfaction:</label>
+		<Ratings
+			value={rating.current}
+			max={rating.max}
+			interactive
+			on:icon={iconClick}
+			id="satisfaction"
+			justify="left"
+		>
+			<svelte:fragment slot="empty"><i class="fa-regular fa-star fa-xl"></i></svelte:fragment>
+			<svelte:fragment slot="half"
+				><i class="fa-solid fa-star-half-stroke fa-xl"></i></svelte:fragment
+			>
+			<svelte:fragment slot="full"><i class="fa-solid fa-star fa-xl"></i></svelte:fragment>
+		</Ratings>
+
+		<p class="font-bold text-sm mt-4">Gender:</p>
+		<label for="m" class="block mt-4">
+			<input type="radio" name="gender" id="m" value="M" bind:group={gender} /> M</label
+		>
+		<label for="f" class="block mt-4">
+			<input type="radio" name="gender" id="f" value="F" bind:group={gender} /> F</label
+		>
+		<label for="both" class="block mt-4">
+			<input type="radio" name="gender" id="both" value="" bind:group={gender} /> All</label
+		>
 		<button class="btn variant-ghost-primary mt-4" type="submit">GET Filtered Sales Data</button>
 	</form>
 	<button class="m-4 btn variant-ghost-surface" on:click={getSalesData}>GET All Sales Data</button>

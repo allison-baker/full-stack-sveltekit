@@ -2,9 +2,13 @@ import { ObjectId } from 'mongodb';
 import clientPromise from '$lib/mongodb/mongodb.client';
 
 export async function GET({ url }) {
-	const itemName = url.searchParams.get('itemName')
-	// const coupon = url.searchParams.get('coupon')
-	// const age = url.searchParams.get('age')
+	const itemName = url.searchParams.get('itemName');
+	const coupon = url.searchParams.get('coupon');
+	const age = url.searchParams.get('age');
+	const satisfaction = url.searchParams.get('satisfaction');
+	const gender = url.searchParams.get('gender');
+
+	console.log(itemName, coupon, age, satisfaction, gender);
 
 	let sales;
 	let client;
@@ -16,14 +20,22 @@ export async function GET({ url }) {
 		let salesArr = await collection?.find().toArray();
 
 		if (itemName) {
-			salesArr = salesArr?.filter((sale) => sale.items.find((item: { name: string; }) => item.name === itemName));
+			salesArr = salesArr?.filter((sale) =>
+				sale.items.find((item: { name: string }) => item.name === itemName)
+			);
 		}
-		// if (coupon) {
-		// 	salesArr = salesArr?.filter((sale) => String(sale.couponUsed) == coupon);
-		// }
-		// if (age) {
-		// 	salesArr = salesArr?.filter((sale) => sale.customer.age === Number(age));
-		// }
+		if (coupon) {
+			salesArr = salesArr?.filter((sale) => String(sale.couponUsed) === coupon);
+		}
+		if (age !== 'NaN') {
+			salesArr = salesArr?.filter((sale) => String(sale.customer.age) === age);
+		}
+		if (satisfaction) {
+			salesArr = salesArr?.filter((sale) => String(sale.customer.satisfaction) === satisfaction);
+		}
+		if (gender) {
+			salesArr = salesArr?.filter((sale) => sale.customer.gender === gender);
+		}
 
 		sales = salesArr?.map((sale) => {
 			return { ...sale, _id: (sale._id as ObjectId).toString() };
