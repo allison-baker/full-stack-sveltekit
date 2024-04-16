@@ -8,8 +8,6 @@ export async function GET({ url }) {
 	const satisfaction = url.searchParams.get('satisfaction');
 	const gender = url.searchParams.get('gender');
 
-	console.log(itemName, coupon, age, satisfaction, gender);
-
 	let sales;
 	let client;
 	try {
@@ -52,7 +50,6 @@ export async function GET({ url }) {
 
 export async function POST({ request }) {
 	const reqBody = await request.json();
-	console.log(reqBody);
 
 	let client;
 	try {

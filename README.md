@@ -9,4 +9,12 @@ View my code for my MongoDB Adapter [here](https://github.com/allison-baker/full
 
 ## Master/Detail Routing
 
-View the movie master/detail routing [here](https://full-stack-sveltekit.vercel.app/movies).  
+View the movie master/detail routing [here](https://full-stack-sveltekit.vercel.app/movies).
+
+## Adding a Form Action
+
+View the form action on the [Airbnb page](https://full-stack-sveltekit.vercel.app/airbnb).
+
+## Adding API Endpoints
+
+Make calls to the Sales API [here](https://full-stack-sveltekit.vercel.app/sales).
