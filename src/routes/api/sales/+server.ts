@@ -27,7 +27,7 @@ export async function GET({ url }) {
 		if (coupon) {
 			salesArr = salesArr?.filter((sale) => String(sale.couponUsed) === coupon);
 		}
-		if (age !== 'NaN') {
+		if (age) {
 			salesArr = salesArr?.filter((sale) => String(sale.customer.age) === age);
 		}
 		if (satisfaction) {

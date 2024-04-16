@@ -9,7 +9,7 @@
 	let rating = {
 		current: NaN,
 		max: 5
-	}
+	};
 
 	const toastStore = getToastStore();
 
@@ -69,7 +69,7 @@
 		rating.current = event.detail.index;
 	}
 
-	async function getSalesData() {
+	async function getSalesData(url: string) {
 		// Reset all data so screen appears in default state while loading new data
 		allSalesData = [];
 		salesStats = {
@@ -80,28 +80,29 @@
 		singleLocation = '';
 
 		// Fetch new data from API
-		const response = await fetch(`/api/sales/?itemName=${itemName}&coupon=${coupon}&age=${age}&satisfaction=${satisfaction}&gender=${gender}`);
-		const data = await response.json();
-		allSalesData = data;
-
-		if (allSalesData.length !== 0) {
-			toastStore.trigger({
-				message: `Total Sales: ${allSalesData.length}`,
-				timeout: 4000
+		fetch(url)
+			.then((res) => res.json())
+			.then((data) => {
+				allSalesData = data;
+				console.log(allSalesData);
+				if (allSalesData.length !== 0) {
+					toastStore.trigger({
+						message: `Total Sales: ${allSalesData.length}`,
+						timeout: 4000
+					});
+				} else {
+					toastStore.trigger({
+						message: `No sales data to display`,
+						timeout: 4000
+					});
+				}
+				// Reset form fields
+				itemName = '';
+				coupon = '';
+				age = '';
+				satisfaction = '';
+				gender = '';
 			});
-		} else {
-			toastStore.trigger({
-				message: `No sales data to display`,
-				timeout: 4000
-			});
-		}
-
-		// Reset form fields
-		itemName = '';
-		coupon = '';
-		age = '';
-		satisfaction = '';
-		gender = '';
 	}
 
 	let statsTitle = '[Please GET Sales Data]';
@@ -124,8 +125,8 @@
 		salesStats.averageSales = salesStats.totalItemsSold / salesStats.totalSales;
 	}
 
-	async function exportSalesData(event: any) {
-		const response = await fetch('/api/sales', {
+	async function exportSalesData() {
+		fetch('/api/sales', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json; charset=utf-8'
@@ -134,11 +135,23 @@
 				storeLocation: singleLocation,
 				totalItemsSold: salesStats.totalItemsSold,
 				totalSales: salesStats.totalSales,
-				averageSales: salesStats.averageSales
+				averageSales: salesStats.averageSales,
+				filters: {
+					itemName,
+					coupon,
+					age,
+					satisfaction,
+					gender
+				}
 			})
-		});
-		const data = await response.json();
-		console.log(data);
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				toastStore.trigger({
+					message: 'Sucess!',
+					timeout: 4000
+				});
+			});
 	}
 </script>
 
@@ -146,13 +159,14 @@
 	<h1 class="m-4 text-3xl uppercase pb-2 border-b-2 border-primary-600-300-token">Sales Data</h1>
 	<form
 		class="bg-surface-100-800-token rounded-md shadow-md p-4 m-4 w-1/2"
-		on:submit|preventDefault={getSalesData}
+		on:submit|preventDefault={() => getSalesData(`/api/sales/?itemName=${itemName}&coupon=${coupon}&age=${age}&satisfaction=${satisfaction}&gender=${gender}`)}
 	>
 		<label for="itemName" class="font-bold text-sm block">
 			Item Name:
 			<input
 				class="block font-normal input w-64 mt-2"
 				name="itemName"
+				id="itemName"
 				type="text"
 				bind:value={itemName}
 				placeholder="Item Name"
@@ -172,7 +186,7 @@
 
 		<label for="age" class="block font-bold text-sm mt-4">
 			Age: <span class="font-normal">{age}</span>
-			<input class="mt-2" type="range" name="age" max="100" bind:value={age} />
+			<input class="mt-2" type="range" name="age" id="age" max="100" bind:value={age} />
 		</label>
 
 		<label for="satisfaction" class="font-bold text-sm mt-4">Satisfaction:</label>
@@ -203,7 +217,7 @@
 		>
 		<button class="btn variant-ghost-primary mt-4" type="submit">GET Filtered Sales Data</button>
 	</form>
-	<button class="m-4 btn variant-ghost-surface" on:click={getSalesData}>GET All Sales Data</button>
+	<button class="m-4 btn variant-ghost-surface" on:click={() => getSalesData('/api/sales/')}>GET All Sales Data</button>
 	<div class="m-4 flex gap-4">
 		{#if allSalesData.length === 0}
 			<div class="bg-surface-100-800-token p-4 rounded-md shadow-md">

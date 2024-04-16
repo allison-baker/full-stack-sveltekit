@@ -8,7 +8,7 @@
 	}
 </script>
 
-<nav class="list-nav p-4" style="view-transition-name: navigation">
+<nav class="list-nav p-4">
 	<ul>
 		<li><a href="/" on:click={drawerClose}>Home</a></li>
 		<li><a href="/movies" on:click={drawerClose}>Movies</a></li>
