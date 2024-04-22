@@ -43,15 +43,15 @@
 		});
 	});
 
-	// let lightSrc = '/images/personal_logo225.png';
-	// let darkSrc = '/images/personal_logo_transparent.png';
-	// let imageSrc: string;
+	let lightSrc = '/personal_logo225.png';
+	let darkSrc = '/personal_logo_transparent.png';
+	let imageSrc: string;
 
 	let isDarkMode: boolean;
 	$: if (browser) {
 		isDarkMode = document.documentElement.classList.contains('dark');
-		// if (isDarkMode) imageSrc = darkSrc;
-		// else imageSrc = lightSrc;
+		if (isDarkMode) imageSrc = darkSrc;
+		else imageSrc = lightSrc;
 	}
 
 	initializeStores();
@@ -88,9 +88,9 @@
 							</svg>
 						</span>
 					</button>
-					<!-- <a href="/"
+					<a href="/"
 						><img src={imageSrc} height="60" width="60" alt="personal logo" class="mr-4" /></a
-					> -->
+					>
 					<a href="/"><strong class="text-3xl">Al Baker</strong></a>
 				</div>
 			</svelte:fragment>
