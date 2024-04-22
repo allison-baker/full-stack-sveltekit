@@ -8,9 +8,14 @@
 
 <div class="container h-full mx-auto flex justify-center items-center">
 	<div class="space-y-10 text-center flex flex-col items-center">
-		<h2 class="h2">Welcome to Skeleton.</h2>
+		<h2 class="h2">Welcome to my Svelte Portfolio.</h2>
 		{#if loggedIn}
 			<p>Welcome, <span class="font-bold">{$page.data.session?.user?.name}</span>!</p>
+			<section class="flex flex-row gap-4">
+				<button class="btn variant-ghost-secondary" on:click={() => goto('/tutorial')}>Tutorial</button>
+				<button class="btn variant-ghost-secondary" on:click={() => goto('/planets')}>Planets</button>
+				<button class="btn variant-ghost-secondary" on:click={() => goto('/todo')}>Todo</button>
+			</section>
 			<section class="flex flex-row gap-4">
 				<button class="btn variant-ghost-secondary" on:click={() => goto('/movies')}>Movies</button>
 				<button class="btn variant-ghost-secondary" on:click={() => goto('/airbnb')}>Airbnb</button>

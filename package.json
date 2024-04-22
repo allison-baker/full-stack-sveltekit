@@ -15,6 +15,7 @@
     "test:unit": "vitest"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@playwright/test": "^1.41.1",
     "@skeletonlabs/skeleton": "2.7.1",
     "@skeletonlabs/tw-plugin": "0.3.1",
@@ -52,6 +53,7 @@
     "chart.js": "^4.4.2",
     "dotenv": "^16.4.1",
     "highlight.js": "11.9.0",
+    "marked": "^12.0.2",
     "mongodb": "^6.3.0",
     "npm-check-updates": "^16.14.14"
   }
