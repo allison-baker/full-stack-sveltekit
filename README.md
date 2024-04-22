@@ -18,3 +18,11 @@ View the form action on the [Airbnb page](https://full-stack-sveltekit.vercel.ap
 ## Adding API Endpoints
 
 Make calls to the Sales API [here](https://full-stack-sveltekit.vercel.app/sales).
+
+## Route Blocking
+
+All routes except the Tutorials route are blocked unless you sign in using GitHub OAuth.
+
+## Code from Fall 2023 Semester
+
+The Tutorials, Planets, and Todo routes are from the Fall 2023 semester. View that original project [here](https://starter-svelte-lake.vercel.app/).
