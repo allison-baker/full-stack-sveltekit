@@ -45,6 +45,9 @@
 		</div>
 	{:else}
 		<section class="flex flex-col gap-4">
+			<button class="btn variant-ghost-secondary" on:click={() => goto('/tutorial')}
+				>Tutorial</button
+			>
 			<p>Sign in to view more!</p>
 			<button class="btn variant-ghost-primary" on:click={() => signIn('github')}>Sign In</button>
 		</section>
