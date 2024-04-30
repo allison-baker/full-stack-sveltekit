@@ -12,13 +12,14 @@ This is the code used to create a MongoDB clientPromise to use throughout the pr
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
 if (!process.env.MONGODB_URI) {
-	throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
+	throw new Error('Invalid/Missing env variable: "MONGODB_URI"');
 }
 
 const uri = process.env.MONGODB_URI;
 let clientPromise: Promise<MongoClient> | undefined;
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API Version
+// Create a MongoClient with a MongoClientOptions
+// object to set the Stable API Version
 try {
 	const client = new MongoClient(uri, {
 		serverApi: {
@@ -35,7 +36,8 @@ try {
 	console.error(err);
 }
 
-// Create a client promise that will resolve to the MongoDB client whenever other parts of our code ask for it
+// Create a client promise that will resolve to the MongoDB
+// client whenever other parts of our code ask for it
 export default clientPromise;
 ```
 
@@ -84,7 +86,10 @@ export async function POST({ request }) {
 		if (client) {
 			await client?.close();
 		}
-		return new Response(JSON.stringify('Failed to connect to MongoDB'), { status: 500 });
+		return new Response(
+			JSON.stringify('Failed to connect to MongoDB'),
+			{ status: 500 }
+		);
 	}
 
 	return new Response(JSON.stringify('Success!'), { status: 200 });
