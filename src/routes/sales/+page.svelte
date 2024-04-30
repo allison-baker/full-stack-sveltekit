@@ -27,12 +27,13 @@
 	Chart.defaults.backgroundColor = '#45484a';
 	let canvasElement: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D | null;
+	let chart: Chart;
 
 	onMount(() => (ctx = canvasElement.getContext('2d')));
 
 	function graphSalesData() {
 		if (ctx && allSalesData.length > 0) {
-			new Chart(ctx, {
+			chart = new Chart(ctx, {
 				type: 'bar',
 				data: {
 					labels: uniqueStoreLocations,
@@ -69,8 +70,12 @@
 		rating.current = event.detail.index;
 	}
 
+	let filterList: HTMLElement;
+
 	async function getSalesData(url: string) {
 		// Reset all data so screen appears in default state while loading new data
+		chart?.destroy();
+		filterList.innerHTML = '';
 		allSalesData = [];
 		salesStats = {
 			totalItemsSold: 0,
@@ -84,10 +89,9 @@
 			.then((res) => res.json())
 			.then((data) => {
 				allSalesData = data;
-				console.log(allSalesData);
 				if (allSalesData.length !== 0) {
 					toastStore.trigger({
-						message: `Total Sales: ${allSalesData.length}`,
+						message: `Total Sales: ${allSalesData.length}.`,
 						timeout: 4000
 					});
 				} else {
@@ -96,6 +100,25 @@
 						timeout: 4000
 					});
 				}
+				if (itemName !== '') {
+					filterList.appendChild(document.createElement('li')).textContent =
+						`Item Name: ${itemName}`;
+				}
+				if (age !== '') {
+					filterList.appendChild(document.createElement('li')).textContent = `Age: ${age}`;
+				}
+				if (coupon !== '') {
+					filterList.appendChild(document.createElement('li')).textContent =
+						`Coupon Used: ${coupon}`;
+				}
+				if (satisfaction !== '') {
+					filterList.appendChild(document.createElement('li')).textContent =
+						`Satisfaction: ${satisfaction}`;
+				}
+				if (gender !== '') {
+					filterList.appendChild(document.createElement('li')).textContent = `Gender: ${gender}`;
+				}
+
 				// Reset form fields
 				itemName = '';
 				coupon = '';
@@ -110,6 +133,13 @@
 		if (allSalesData.length === 0) statsTitle = '[Please GET Sales Data]';
 		else if (singleLocation === '') statsTitle = '[Please Select a Location]';
 		else statsTitle = `${singleLocation} Sales Stats`;
+	}
+
+	let currentlyShowing = '[Please GET Sales Data]';
+	$: {
+		if (allSalesData.length === 0) currentlyShowing = '[Please GET Sales Data]';
+		else if (allSalesData.length === 5000) currentlyShowing = 'All Sales Data, No Filters';
+		else currentlyShowing = 'Filtered Sales Data';
 	}
 
 	function handleLocationSelection(event: any) {
@@ -159,7 +189,10 @@
 	<h1 class="m-4 text-3xl uppercase pb-2 border-b-2 border-primary-600-300-token">Sales Data</h1>
 	<form
 		class="bg-surface-100-800-token rounded-md shadow-md p-4 m-4 w-1/2"
-		on:submit|preventDefault={() => getSalesData(`/api/sales/?itemName=${itemName}&coupon=${coupon}&age=${age}&satisfaction=${satisfaction}&gender=${gender}`)}
+		on:submit|preventDefault={() =>
+			getSalesData(
+				`/api/sales/?itemName=${itemName}&coupon=${coupon}&age=${age}&satisfaction=${satisfaction}&gender=${gender}`
+			)}
 	>
 		<label for="itemName" class="font-bold text-sm block">
 			Item Name:
@@ -217,7 +250,11 @@
 		>
 		<button class="btn variant-ghost-primary mt-4" type="submit">GET Filtered Sales Data</button>
 	</form>
-	<button class="m-4 btn variant-ghost-surface" on:click={() => getSalesData('/api/sales/')}>GET All Sales Data</button>
+	<button class="m-4 btn variant-ghost-surface" on:click={() => getSalesData('/api/sales/')}
+		>GET All Sales Data</button
+	>
+	<h3 class="mx-4 mt-4 text-lg font-bold">Currently Showing: {currentlyShowing}</h3>
+	<ul class="mx-4 mb-4" bind:this={filterList}></ul>
 	<div class="m-4 flex gap-4">
 		{#if allSalesData.length === 0}
 			<div class="bg-surface-100-800-token p-4 rounded-md shadow-md">
@@ -254,7 +291,7 @@
 	<button
 		class="m-4 btn variant-ghost-surface"
 		on:click={graphSalesData}
-		disabled={allSalesData.length === 0}>Graph All Sales Data</button
+		disabled={allSalesData.length === 0}>Graph Current Sales Data</button
 	>
 	<div class="w-1/2 m-4">
 		<canvas bind:this={canvasElement}></canvas>
